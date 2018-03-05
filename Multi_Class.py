@@ -13,12 +13,6 @@ def input_data(input_option):
             if text[4] == input_option:
                 text[4] = '1'
                 array = np.vstack([array, text])
-            # elif text[4] == "class-2":
-            #     text[4] = '2'
-            #     array = np.vstack([array, text])
-            # elif text[4] == "class-3":
-            #     text[4] = '3'
-            #     array = np.vstack([array, text])
             else:
                 text[4] = -1
                 array = np.vstack([array, text])
@@ -48,10 +42,10 @@ def input_test_new():
 
 
 def train(array, class_num, iteration_num):
-    array = np.delete(array, (0), axis=0)  # remove first column of input values
+    array = np.delete(array, (0), axis=0)  
     array = array.astype(np.float)
-    weights = np.array([0.0, 0.0, 0.0, 0.0])  # 0-ed initial weights
-    b = 0.0  # bias variable
+    weights = np.array([0.0, 0.0, 0.0, 0.0]) 
+    b = 0.0  
     r = list(range(len(array)))
     random.shuffle(r)
     cntA = 0
@@ -69,8 +63,6 @@ def train(array, class_num, iteration_num):
             else:
                 cntB += 1
                 continue
-    # print("Train Correct: ", (cntB / cntTot) * 100, "% of Values ", class_num, "Iteration: ", iteration_num)
-    # print("Train Incorrect: ", (cntA / cntTot) * 100, "% of Values", class_num, "Iteration: ", iteration_num)
     return weights, b
 
 
@@ -156,7 +148,6 @@ def main():
         elif (testactual[i][4] == 3):
             tot_3 += 1
         if (int(testactual[i][4]) == m):
-            # print(m, " CORRECT")
             if (testactual[i][4] == 1):
                 pred_1 += 1
             elif (testactual[i][4] == 2):
@@ -165,7 +156,6 @@ def main():
                 pred_3 += 1
         else:
             continue
-        # temparr = [0, 0, 0]
     print("Final Weights for perceptron 1: ", final_weights_1)
     print("Final Weights for perceptron 2: ", final_weights_2)
     print("Final Weights for perceptron 3: ",final_weights_3)
@@ -173,9 +163,6 @@ def main():
     print((pred_1 / tot_1) * 100, "% class-1 predicted")
     print((pred_2 / tot_2) * 100, "% class-2 predicted")
     print((pred_3 / tot_3) * 100, "% class-3 predicted")
-
-
-#     weights += np.dot(array[r[x]][0:4], array[r[x]][4]) + 2*reg_value*(np.sum(weights**2))
 
 if __name__ == "__main__":
     main()

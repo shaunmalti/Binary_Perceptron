@@ -27,7 +27,6 @@ def input_data(option, input_option_1, input_option_2, input_option_other):
 def train(array):
     array = np.delete(array, (0), axis=0)  # remove first column of input values
     array = array.astype(np.float)
-    # weights = np.random.rand(4)  # randomised initial weights
     weights = np.array([0.0, 0.0, 0.0, 0.0])
     b = 0.0  # bias variable
     r = list(range(len(array)))  # TODO CHANGE BACK TO INCLUDE RANDOM INPUT
@@ -63,11 +62,9 @@ def test(weights,b,test_array):
         temp = np.dot(array[i][0:4], weights[0:4]) + b
         if (temp*array[i][4]) >= 0:  # if sign produced is positive then prediction is correct
             res_array = np.append(res_array, [[temp, array[i][4], 1]], axis=0)
-            # print(str(temp) + "," + str(array[i][4]) + "," + str(1))
             cntB += 1
         else: # i.e. when is incorrect
             res_array = np.append(res_array, [[temp, array[i][4], 0]], axis=0)
-            # print(str(temp) + "," + str(array[i][4]) + "," + str(0))
             cntA += 1
     res_array = np.delete(res_array, 0, axis=0)  # remove first column of result value test values
     print("Test Correct Accuracy: ", (cntB/cntTot)*100, "%")
