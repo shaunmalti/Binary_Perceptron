@@ -29,7 +29,7 @@ def train(array):
     array = array.astype(np.float)
     weights = np.array([0.0, 0.0, 0.0, 0.0])
     b = 0.0  # bias variable
-    r = list(range(len(array)))  # TODO CHANGE BACK TO INCLUDE RANDOM INPUT
+    r = list(range(len(array)))
     random.shuffle(r)
     cntA = 0
     cntB = 0

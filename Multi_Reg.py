@@ -63,17 +63,12 @@ def train(array, class_num, reg_value):
             cntTot += 1
             temp = np.dot(array[r[x]][0:4], weights[0:4]) + b
             if (temp * array[r[x]][4]) <= 0:
-
                 cntA += 1
-                weights = np.around(weights + np.dot(array[r[x]][0:4], array[r[x]][4]) - 2*reg_value*(weights),2) 
+                weights = weights + np.dot(array[r[x]][0:4], array[r[x]][4]) - reg_value*(weights)
                 b += array[r[x]][4]
-
             else:
                 cntB += 1
                 continue
-    cntA = 0
-    cntB = 0
-    cntTot = 0
     return weights, b
 
 
@@ -105,11 +100,11 @@ def input_test():
 
 
 def multi_train(array, weights_1_array, b_1_array, reg_value, class_val):
-    weights1, b1 = (train(array, class_val, reg_value))
-    weights_1_array = np.vstack([weights_1_array, weights1])
-    b_1_array = np.vstack([b_1_array, b1])
+    for i in range(0, 100):
+        weights1, b1 = (train(array, class_val, reg_value))
+        weights_1_array = np.vstack([weights_1_array, weights1])
+        b_1_array = np.vstack([b_1_array, b1])
     weights_1_array = np.delete(weights_1_array, (0), axis=0)
-
     b_1_array = np.delete(b_1_array, (0), axis=0)
     final_weights_1 = weights_1_array.mean(axis=0)
     final_b_1 = b_1_array.mean(axis=0)
@@ -130,23 +125,11 @@ def main():
     array3 = input_data("class-3")
     reg_value = [0.01, 0.1, 1.0, 10.0, 100.0]
 
-    weights_1_reg_val = np.array([0, 0, 0, 0], )
-    weights_2_reg_val = np.array([0, 0, 0, 0], )
-    weights_3_reg_val = np.array([0, 0, 0, 0], )
-
-
     final_weights_1, final_b_1 = multi_train(array1, weights_1_array, b_1_array, reg_value[0], class_val="class-1")
-    weights_1_reg_val = np.vstack([weights_1_reg_val, final_weights_1])
 
     final_weights_2, final_b_2 = multi_train(array2, weights_2_array, b_2_array, reg_value[0], class_val="class-2")
-    weights_2_reg_val = np.vstack([weights_2_reg_val, final_weights_2])
-        
-    final_weights_3, final_b_3 = multi_train(array3, weights_3_array, b_3_array, reg_value[0], class_val="class-3")
-    weights_3_reg_val = np.vstack([weights_3_reg_val, final_weights_3])
 
-    weights_1_reg_val = np.delete(weights_1_reg_val, (0), axis=0)
-    weights_2_reg_val = np.delete(weights_2_reg_val, (0), axis=0)
-    weights_3_reg_val = np.delete(weights_3_reg_val, (0), axis=0)
+    final_weights_3, final_b_3 = multi_train(array3, weights_3_array, b_3_array, reg_value[0], class_val="class-3")
 
     weightsarray = [final_weights_1.tolist(), final_weights_2.tolist(), final_weights_3.tolist()]
     barray = [final_b_1, final_b_2, final_b_3]
@@ -154,14 +137,14 @@ def main():
     testactual = input_test_new()
     testactual = np.delete(testactual, (0), axis=0)
     testactual = testactual.astype(np.float)
-    
+
     tot_1 = 0
     tot_2 = 0
     tot_3 = 0
     pred_1 = 0
     pred_2 = 0
     pred_3 = 0
-    
+
     for i in range(len(testactual)):
         temparr = simple_test(testactual[i], weightsarray, barray)
         m = temparr.index(max(temparr)) + 1
@@ -180,11 +163,9 @@ def main():
                 pred_3 += 1
         else:
             continue
-        temparr = [0, 0, 0]
     print("Final Weights for perceptron 1: ", final_weights_1)
     print("Final Weights for perceptron 2: ", final_weights_2)
     print("Final Weights for perceptron 3: ",final_weights_3)
-    #
     print((pred_1 / tot_1) * 100, "% class-1 predicted")
     print((pred_2 / tot_2) * 100, "% class-2 predicted")
     print((pred_3 / tot_3) * 100, "% class-3 predicted")
